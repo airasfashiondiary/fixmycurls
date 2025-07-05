@@ -3,149 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fix My Curls ID Form</title>
+    <title>Fix My Curls</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background: #f5f5f5;
-            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Beth Ellen', cursive;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
         }
 
         .container {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(224, 224, 244);
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 100vw;
-            max-height: 100vh;
-            margin: 0 auto;
             overflow: hidden;
-            background: #f5f5f5;
+            max-width: 100%;
+            max-height: 100%;
+            height: 100vh !important;
+            aspect-ratio: 9 / 16 !important;
+            width: auto !important;
+            max-width: none !important;
+            max-height: none !important;
         }
 
-        .background {
-            width: 100vw;
-            height: auto;
-            max-width: 100vw;
-            max-height: 100vh;
-            display: block;
-            object-fit: contain;
-        }
-
-        .input-box {
+        .polaroid-section {
             position: absolute;
-            width: 60%;
-            left: 20%;
-            font-size: 14px;
-            font-family: inherit;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: black;
-            caret-color: black;
-            z-index: 2;
-            text-align: left;
-            transition: color 0.3s ease;
-        }
-
-        .input-box::placeholder {
-            color: transparent;
-        }
-
-        .input-box:focus,
-        .input-box:hover {
-            color: black;
-        }
-
-        .input-box:focus::placeholder,
-        .input-box:hover::placeholder {
-            color: #aaa;
-        }
-
-        /* Position each field */
-        #name {
-            top: 47.5%;
-            left: 37%;
-        }
-
-        #perfect {
-            top: 54%;
-            left: 41%;
-        }
-
-        #pairs {
-            top: 60%;
-            left: 43%;
-        }
-
-        #love {
-            top: 66%;
-            left: 43%;
-        }
-
-        .photo-upload {
-            position: absolute;
-            top: 4%;
-            left: 47.5%;
-            width: 19.8%;
-            aspect-ratio: 1 / 1.05;
-            transform: rotate(-6deg);
+            top: 0vw;
+            right: 0;
+            width: fit-content;
+            height: fit-content;
             z-index: 10;
-            overflow: hidden;
-            cursor: pointer;
-            display: block;
-            min-width: 0px;
-            min-height: 0px;
         }
 
-        .preview-image {
+        .polaroid {
+            position: relative;
+            z-index: 10;
+            width: 125vw;
+            max-width: 600px;
+            height: auto;
+        }
+
+        .polaroid-photo-area {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-            min-width: 0;
-            min-height: 0;
-            pointer-events: none;
+            top: 8%;
+            left: 10%;
+            width: 80%;
+            height: 65%;
+            z-index: 11;
+            cursor: pointer;
         }
 
-        .page-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999;
-            pointer-events: none;
-            object-fit: cover;
+        .photo-canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-12%, -113.5%) rotate(-6.6deg);
+            border-radius: 8px;
+        }
+
+        .upload-button {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(10%, -110%) rotate(-8deg);
+            z-index: 12;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 2px dashed #666;
+            border-radius: 8px;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+            border-color: #333;
+        }
+
+        .upload-button.hidden {
+            display: none;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .clip {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 90px;
+            height: 90px;
+            z-index: 20;
+            transform: rotate(4deg) scaleX(-1);
+        }
+
+        .grid-container {
+            position: absolute;
+            bottom: 15vh;
+            left: 5vw;
+            right: 5vw;
+            top: 50vh;
+        }
+
+        .grid-item {
+            background: transparent;
+            border: 2px solid #666;
+            margin-bottom: 0;
+            padding: 2.5vw;
+            position: relative;
+            height: 9vh;
+            min-height: 65px;
+        }
+
+        .grid-item:not(:last-child) {
+            border-bottom: none;
+        }
+
+        .field-name {
+            font-family: 'Fira Code', monospace;
+            font-size: 2.2vw;
+            font-weight: 500;
+            color: #333;
+            position: absolute;
+            top: 1.2vw;
+            left: 2.5vw;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .field-input {
+            font-family: 'Beth Ellen', cursive;
+            font-size: 5.5vw;
+            color: #666;
+            border: none;
+            background: transparent;
+            outline: none;
+            position: absolute;
+            bottom: 4vw;
+            text-align: left;
+        }
+
+        .field-input::placeholder {
+            color: #666;
+        }
+
+        /* Cascading indentation for input fields */
+        .grid-item:nth-child(1) .field-input {
+            left: 10vw;
+            width: calc(100% - 18vw);
+        }
+
+        .grid-item:nth-child(2) .field-input {
+            left: 13vw;
+            width: calc(100% - 23vw);
+        }
+
+        .grid-item:nth-child(3) .field-input {
+            left: 16vw;
+            width: calc(100% - 28vw);
+        }
+
+        .grid-item:nth-child(4) .field-input {
+            left: 19vw;
+            width: calc(100% - 33vw);
+        }
+
+        .share-button {
+            position: absolute;
+            bottom: 6vh;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #E4415E;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(228, 65, 94, 0.3);
+        }
+
+        .share-button:hover {
+            background-color: #d12f4c;
+            box-shadow: 0 6px 20px rgba(228, 65, 94, 0.4);
+            transform: translateX(-50%) translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="your-design.png" alt="Fix My Curls ID" class="background" />
-        <input type="text" id="name" class="input-box" />
-        <input type="text" id="perfect" class="input-box" />
-        <input type="text" id="pairs" class="input-box" />
-        <input type="text" id="love" class="input-box" />
-        <label class="photo-upload">
-            <input type="file" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
-            <img id="preview-img" class="preview-image" src="" alt="">
-        </label>
+    <div class="container" id="card-container">
+        <div class="polaroid-section">
+            <img src="polaroid.png" alt="Polaroid" class="polaroid" id="polaroid-img">
+            <div class="polaroid-photo-area" id="photo-area">
+                <canvas id="photo-canvas" class="photo-canvas"></canvas>
+            </div>
+            <button class="upload-button" id="upload-btn">
+                + Upload Photo
+            </button>
+            <input type="file" class="upload-input" id="upload-input" accept="image/*">
+            <img src="clip.png" alt="Clip" class="clip">
+        </div>
+        
+        <div class="meet-on-the-go" style="position: absolute; left: 5vw; bottom: 54vh; z-index: 15; text-align: left;">
+            <div style="font-family: 'Fira Code', monospace; font-size: 3.5vw; color: #222; letter-spacing: 1px;">meet:</div>
+            <div style="font-family: 'Fira Code', monospace; font-size: 4vw; font-weight: bold; color: #222; margin-top: 0.2vw;">on the go</div>
+        </div>
+        
+        <div class="grid-container">
+            <div class="grid-item">
+                <div class="field-name">NAME:</div>
+                <input type="text" class="field-input" placeholder="buzz-worthy lips" value="buzz-worthy lips">
+            </div>
+            <div class="grid-item">
+                <div class="field-name">PERFECT FOR:</div>
+                <input type="text" class="field-input" placeholder="the clean girl" value="the clean girl">
+            </div>
+            <div class="grid-item">
+                <div class="field-name">PAIRS WELL WITH:</div>
+                <input type="text" class="field-input" placeholder="a girls night out" value="a girls night out">
+            </div>
+            <div class="grid-item">
+                <div class="field-name">LOVE LANGUAGE:</div>
+                <input type="text" class="field-input" placeholder="the perfect lip combo" value="the perfect lip combo">
+            </div>
+        </div>
+        
+        <button class="share-button" id="share-btn">Share to Instagram Story</button>
     </div>
-    <img src="YOUR_OVERLAY_IMAGE.png" alt="Overlay" class="page-overlay" />
-  
+
     <script>
-      function handleImageUpload(event) {
-        const file = event.target.files[0];
-        const preview = document.getElementById("preview-img");
-        if (file) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = 'block';
+        // Get elements
+        const photoArea = document.getElementById('photo-area');
+        const photoCanvas = document.getElementById('photo-canvas');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadInput = document.getElementById('upload-input');
+        const shareBtn = document.getElementById('share-btn');
+
+        // Set canvas size to match container and account for rotation
+        function resizeCanvasToArea() {
+            const rect = photoArea.getBoundingClientRect();
+            console.log('Photo area dimensions:', rect.width, rect.height);
+            
+            // Make canvas slightly smaller to account for rotation overflow
+            const canvasWidth = 286
+            const canvasHeight = 284
+            
+            // Set canvas size
+            photoCanvas.width = canvasWidth;
+            photoCanvas.height = canvasHeight;
+            
+            // Set CSS size to match
+            photoCanvas.style.width = canvasWidth + 'px';
+            photoCanvas.style.height = canvasHeight + 'px';
+            
+            console.log('Canvas sized to:', photoCanvas.width, photoCanvas.height);
         }
-      }
+        // Initial resize
+        resizeCanvasToArea();
+        // Resize on window resize
+        window.addEventListener('resize', resizeCanvasToArea);
+
+        // Upload button click
+        uploadBtn.addEventListener('click', () => {
+            uploadInput.click();
+        });
+
+        // Photo area click (for re-upload)
+        photoArea.addEventListener('click', () => {
+            uploadInput.click();
+        });
+
+        // Draw image to canvas, fill/crop to cover the polaroid area
+        function drawImageCover(ctx, img, canvasWidth, canvasHeight) {
+            const imgAspect = img.width / img.height;
+            const canvasAspect = canvasWidth / canvasHeight;
+            let sx, sy, sw, sh;
+            
+            if (imgAspect > canvasAspect) {
+                // Image is wider than canvas - crop sides
+                sh = img.height;
+                sw = sh * canvasAspect;
+                sx = (img.width - sw) / 2;
+                sy = 0;
+            } else {
+                // Image is taller than canvas - crop top/bottom
+                sw = img.width;
+                sh = sw / canvasAspect;
+                sx = 0;
+                sy = (img.height - sh) / 2;
+            }
+            
+            // Clear canvas and draw image to fill entire area
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvasWidth, canvasHeight);
+        }
+
+        // Handle file upload
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('File selected:', file.name);
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new window.Image();
+                    img.onload = function() {
+                        console.log('Image loaded:', img.width, img.height);
+                        resizeCanvasToArea();
+                        const ctx = photoCanvas.getContext('2d');
+                        drawImageCover(ctx, img, photoCanvas.width, photoCanvas.height);
+                        console.log('Image drawn to canvas');
+                        // Hide upload button
+                        uploadBtn.classList.add('hidden');
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Share to Instagram
+        shareBtn.addEventListener('click', async () => {
+            try {
+                // Hide share button temporarily
+                shareBtn.style.display = 'none';
+                
+                // Capture the card
+                const cardElement = document.getElementById('card-container');
+                const canvas = await html2canvas(cardElement, {
+                    scale: 2,
+                    backgroundColor: null,
+                    logging: false,
+                    width: cardElement.offsetWidth,
+                    height: cardElement.offsetHeight
+                });
+                
+                // Show share button again
+                shareBtn.style.display = 'block';
+                
+                // Convert to blob
+                canvas.toBlob(async (blob) => {
+                    if (navigator.share && navigator.canShare) {
+                        const file = new File([blob], 'fixmycurls-card.png', { type: 'image/png' });
+                        
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'Fix My Curls Card',
+                                text: 'Check out my Fix My Curls card!'
+                            });
+                        } catch (err) {
+                            // User cancelled or error
+                            console.log('Share cancelled or failed:', err);
+                        }
+                    } else {
+                        // Fallback: download the image
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'fixmycurls-card.png';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        alert('Image downloaded! You can now share it to Instagram from your gallery.');
+                    }
+                }, 'image/png');
+            } catch (error) {
+                console.error('Error capturing screenshot:', error);
+                alert('Failed to capture screenshot. Please try again.');
+            }
+        });
     </script>
 </body>
 </html> 
