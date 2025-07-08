@@ -213,12 +213,13 @@
         }
         .logo-overlay {
           position: absolute;
-          top: 2vw;
-          left: 2vw;
-          z-index: 10000;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          object-fit: cover;
+          z-index: 1000;
           pointer-events: none;
-          width: 350px;   /* Increase this value as needed */
-          height: auto;
         }
         .stamp-overlay {
           position: absolute;
@@ -274,7 +275,7 @@
         
         <button class="share-button" id="share-btn">Save</button>
     </div>
-    <img src="logo.png" alt="Logo" class="logo-overlay" />
+    <img src="logo.png" class="logo-overlay" />
     <img src="stamp.png" alt="Stamp" class="stamp-overlay" />
 
     <script>
