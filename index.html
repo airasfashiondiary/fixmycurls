@@ -210,6 +210,15 @@
             box-shadow: 0 6px 20px rgba(228, 65, 94, 0.4);
             transform: translateX(-50%) translateY(-2px);
         }
+        .logo-overlay {
+          position: fixed;
+          top: 2vw;         /* Adjust as needed */
+          left: 2vw;        /* Adjust as needed */
+          width: 60px;      /* Or use % or vw for responsiveness */
+          height: auto;
+          z-index: 10000;
+          pointer-events: none; /* So it doesn't block clicks */
+        }
     </style>
 </head>
 <body>
@@ -252,6 +261,7 @@
         
         <button class="share-button" id="share-btn">Save</button>
     </div>
+    <img src="logo.png" alt="Logo" class="logo-overlay" />
 
     <script>
         // Get elements
