@@ -374,34 +374,23 @@
                 
                 // Capture the card
                 const cardElement = document.getElementById('card-container');
-                const canvas = await html2canvas(cardElement, {
+                const originalStyle = cardElement.getAttribute('style') || '';
+
+                // Temporarily set to 1080x1920 for screenshot
+                cardElement.style.width = '1080px';
+                cardElement.style.height = '1920px';
+
+                html2canvas(cardElement, {
+                    width: 1080,
+                    height: 1920,
                     scale: 2,
-                    backgroundColor: null,
-                    logging: false,
-                    width: cardElement.offsetWidth,
-                    height: cardElement.offsetHeight
-                });
-                
-                // Show share button again
-                shareBtn.style.display = 'block';
-                
-                // Convert to blob
-                canvas.toBlob(async (blob) => {
-                    if (navigator.share && navigator.canShare) {
-                        const file = new File([blob], 'fixmycurls-card.png', { type: 'image/png' });
-                        
-                        try {
-                            await navigator.share({
-                                files: [file],
-                                title: 'Fix My Curls Card',
-                                text: 'Check out my Fix My Curls card!'
-                            });
-                        } catch (err) {
-                            // User cancelled or error
-                            console.log('Share cancelled or failed:', err);
-                        }
-                    } else {
-                        // Fallback: download the image
+                    backgroundColor: null
+                }).then(canvas => {
+                    // Revert to original style
+                    cardElement.setAttribute('style', originalStyle);
+
+                    // Download or share the image
+                    canvas.toBlob(blob => {
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
@@ -410,10 +399,12 @@
                         a.click();
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
-                        
-                        alert('Image downloaded! You can now share it to Instagram from your gallery.');
-                    }
-                }, 'image/png');
+                    }, 'image/png');
+                });
+                
+                // Show share button again
+                shareBtn.style.display = 'block';
+                
             } catch (error) {
                 console.error('Error capturing screenshot:', error);
                 alert('Failed to capture screenshot. Please try again.');
