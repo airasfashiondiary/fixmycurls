@@ -221,18 +221,15 @@
           height: auto;
         }
         .stamp-overlay {
-          position: absolute;
-          top: 10vw;      /* Adjust as needed for your design */
-          left: 60vw;     /* Adjust as needed for your design */
+          position: fixed;         /* or absolute if you want it inside .container */
+          top: 10vw;               /* Adjust as needed */
+          right: 10vw;             /* Adjust as needed */
           z-index: 10001;
-          pointer-events: none;
-          width: auto;
-          height: auto;
+          pointer-events: none;    /* So it doesn't block clicks */
+          width: auto;             /* Use original image size */
+          height: auto;            /* Use original image size */
           max-width: none;
           max-height: none;
-          /* Optionally, add a drop shadow or rotation: */
-          /* filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); */
-          /* transform: rotate(-8deg); */
         }
     </style>
 </head>
