@@ -212,12 +212,14 @@
         }
         .logo-overlay {
           position: fixed;
-          top: 2vw;         /* Adjust as needed */
-          left: 2vw;        /* Adjust as needed */
+          top: 2vw;
+          left: 2vw;
           z-index: 10000;
-          pointer-events: none; /* So it doesn't block clicks */
-          max-width: 30vw;   /* or whatever fits your design */
+          pointer-events: none;
+          width: 120px;    /* Double the previous 60px, or increase as needed */
           height: auto;
+          /* Or, for responsiveness: */
+          /* max-width: 60vw; */
         }
     </style>
 </head>
