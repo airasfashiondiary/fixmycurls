@@ -368,26 +368,20 @@
         });
 
         // Share to Instagram
-        shareBtn.addEventListener('click', async () => {
+         shareBtn.addEventListener('click', async () => {
         try {
-            // Temporarily hide the Save button
+            // Hide the Save button
             shareBtn.style.visibility = 'hidden';
 
-            // Scroll to the top to make sure everything's in view
+            // Scroll to top so everything is captured
             window.scrollTo(0, 0);
-
-            // Wait briefly to ensure the scroll completes
             await new Promise(resolve => setTimeout(resolve, 300));
 
-            // Select the card element
             const cardElement = document.getElementById('card-container');
-
-            // Capture the screenshot
             const canvas = await html2canvas(cardElement, {
                 scale: 2,
                 backgroundColor: null,
                 useCORS: true,
-                logging: false,
                 scrollX: 0,
                 scrollY: -window.scrollY,
                 width: cardElement.offsetWidth,
@@ -397,16 +391,22 @@
             // Show the Save button again
             shareBtn.style.visibility = 'visible';
 
-            // Convert the canvas to a downloadable image
-            canvas.toBlob((blob) => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'fixmycurls-card.png';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], 'fixmycurls-card.png', { type: 'image/png' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Fix My Curls Card',
+                            text: ''
+                        });
+                    } catch (err) {
+                        console.log('User cancelled share or failed:', err);
+                    }
+                } else {
+                    console.log("Sharing not supported");
+                }
             }, 'image/png');
 
         } catch (error) {
