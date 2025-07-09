@@ -269,12 +269,15 @@
                 <div class="field-name">LOVE LANGUAGE:</div>
                 <input type="text" class="field-input" placeholder="my two step curly hair routine" value="the perfect lip combo">
             </div>
+            
         </div>
         
+            <img src="logo.png" alt="Logo" class="logo-overlay" />
+            <img src="stamp.png" alt="Stamp" class="stamp-overlay" />
+            
         <button class="share-button" id="share-btn">Save</button>
     </div>
-    <img src="logo.png" alt="Logo" class="logo-overlay" />
-    <img src="stamp.png" alt="Stamp" class="stamp-overlay" />
+   
 
     <script>
         // Get elements
@@ -376,10 +379,10 @@
                 const cardElement = document.getElementById('card-container');
                 const canvas = await html2canvas(cardElement, {
                     scale: 2,
-                    backgroundColor: null,
-                    logging: false,
-                    width: cardElement.offsetWidth,
-                    height: cardElement.offsetHeight
+                  backgroundColor: null,
+                  logging: false,
+                  width: cardElement.offsetWidth,
+                 height: cardElement.offsetHeight
                 });
                 
                 // Show share button again
