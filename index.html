@@ -369,37 +369,36 @@
 
         // Share to Instagram
         shareBtn.addEventListener('click', async () => {
-    try {
-        // Hide the Save button without changing layout
-        shareBtn.style.visibility = 'hidden';
-        await new Promise(requestAnimationFrame); // Wait for DOM to update
+        try {
+            // Temporarily hide the Save button
+            shareBtn.style.visibility = 'hidden';
 
-        // Capture the card
-        const cardElement = document.getElementById('card-container');
-        const canvas = await html2canvas(cardElement, {
-            scale: 2,
-            backgroundColor: null,
-            scrollY: -window.scrollY
-        });
+            // Scroll to the top to make sure everything's in view
+            window.scrollTo(0, 0);
 
-        // Show Save button again
-        shareBtn.style.visibility = 'visible';
+            // Wait briefly to ensure the scroll completes
+            await new Promise(resolve => setTimeout(resolve, 300));
 
-        // Convert to blob and share or download
-        canvas.toBlob(async (blob) => {
-            if (navigator.share && navigator.canShare && blob) {
-                const file = new File([blob], 'fixmycurls-card.png', { type: 'image/png' });
+            // Select the card element
+            const cardElement = document.getElementById('card-container');
 
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Fix My Curls Card',
-                        text: ''
-                    });
-                } catch (err) {
-                    console.log('Share cancelled or failed:', err);
-                }
-            } else if (blob) {
+            // Capture the screenshot
+            const canvas = await html2canvas(cardElement, {
+                scale: 2,
+                backgroundColor: null,
+                useCORS: true,
+                logging: false,
+                scrollX: 0,
+                scrollY: -window.scrollY,
+                width: cardElement.offsetWidth,
+                height: cardElement.offsetHeight
+            });
+
+            // Show the Save button again
+            shareBtn.style.visibility = 'visible';
+
+            // Convert the canvas to a downloadable image
+            canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -408,14 +407,12 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-            }
-        }, 'image/png');
+            }, 'image/png');
 
-    } catch (error) {
-        console.error('Error capturing screenshot:', error);
-        shareBtn.style.visibility = 'visible';
-    }
-});
+        } catch (error) {
+            console.error('Screenshot failed:', error);
+        }
+    });
 </script>
 </body>
 </html>
