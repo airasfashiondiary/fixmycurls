@@ -370,31 +370,30 @@
         // Share to Instagram
          shareBtn.addEventListener('click', async () => {
         try {
-            // Hide the Save button
-            shareBtn.style.visibility = 'hidden';
-
-            // Scroll to top so everything is captured
+         // Scroll to top to ensure full viewport is rendered correctly
             window.scrollTo(0, 0);
-            await new Promise(resolve => setTimeout(resolve, 300));
+               await new Promise(resolve => setTimeout(resolve, 50)); // wait for scroll to finish
 
+            // Hide the Save button without changing layout
+            shareBtn.style.visibility = 'hidden';
+            await new Promise(requestAnimationFrame); // Wait for DOM to update
+
+            // Capture the card
             const cardElement = document.getElementById('card-container');
             const canvas = await html2canvas(cardElement, {
                 scale: 2,
                 backgroundColor: null,
-                useCORS: true,
-                scrollX: 0,
-                scrollY: -window.scrollY,
-                width: cardElement.offsetWidth,
-                height: cardElement.offsetHeight
+                scrollY: -window.scrollY
             });
 
-            // Show the Save button again
+            // Show Save button again
             shareBtn.style.visibility = 'visible';
 
+            // Convert to blob and share or download
             canvas.toBlob(async (blob) => {
-                const file = new File([blob], 'fixmycurls-card.png', { type: 'image/png' });
+                if (navigator.share && navigator.canShare && blob) {
+                    const file = new File([blob], 'fixmycurls-card.png', { type: 'image/png' });
 
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
                         await navigator.share({
                             files: [file],
@@ -402,15 +401,23 @@
                             text: ''
                         });
                     } catch (err) {
-                        console.log('User cancelled share or failed:', err);
+                        console.log('Share cancelled or failed:', err);
                     }
-                } else {
-                    console.log("Sharing not supported");
+                } else if (blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'fixmycurls-card.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
                 }
             }, 'image/png');
 
         } catch (error) {
-            console.error('Screenshot failed:', error);
+            console.error('Error capturing screenshot:', error);
+            shareBtn.style.visibility = 'visible';
         }
     });
 </script>
