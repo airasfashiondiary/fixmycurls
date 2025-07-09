@@ -27,15 +27,18 @@
         }
 
         .container {
-                    
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background-color: transparent;
-        overflow: visible;
-        padding: 0;
-        margin: 0;
-
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(224, 224, 244);
+            position: relative;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 100%;
+            height: 100vh !important;
+            aspect-ratio: 9 / 16 !important;
+            width: auto !important;
+            max-width: none !important;
+            max-height: none !important;
         }
 
         .polaroid-section {
@@ -231,8 +234,7 @@
     </style>
 </head>
 <body>
-    <div class="card-wrapper">
-      <div class="container" id="card-container">
+    <div class="container" id="card-container">
         <div class="polaroid-section">
             <img src="polaroid.png" alt="Polaroid" class="polaroid" id="polaroid-img">
             <div class="polaroid-photo-area" id="photo-area">
@@ -246,8 +248,8 @@
         </div>
         
         <div class="meet-on-the-go" style="position: absolute; left: 5vw; bottom: 54vh; z-index: 15; text-align: left;">
-                <div style="font-family: 'Josefin Sans', sans-serif; font-size: 5vw; color: #736493; letter-spacing: 1px;">meet:</div>
-            <div style="font-family: 'Josefin Sans', sans-serif; font-size: 6vw; font-weight: bold; color: #736493; margin-top: 0.2vw;">on the go</div>
+            <div style="font-family: 'Josefin Sans', sans-serif; font-size: 5vw; color: #726392; letter-spacing: 1px;">meet:</div>
+            <div style="font-family: 'Josefin Sans', sans-serif; font-size: 6vw; font-weight: bold; color: #726392; margin-top: 0.2vw;">on the go</div>
         </div>
         
         <div class="grid-container">
@@ -267,16 +269,12 @@
                 <div class="field-name">LOVE LANGUAGE:</div>
                 <input type="text" class="field-input" placeholder="my two step curly hair routine" value="the perfect lip combo">
             </div>
-            
         </div>
         
-            <img src="logo.png" alt="Logo" class="logo-overlay" />
-            <img src="stamp.png" alt="Stamp" class="stamp-overlay" />
-            
         <button class="share-button" id="share-btn">Save</button>
     </div>
-    </div>
-   
+    <img src="logo.png" alt="Logo" class="logo-overlay" />
+    <img src="stamp.png" alt="Stamp" class="stamp-overlay" />
 
     <script>
         // Get elements
@@ -292,8 +290,8 @@
             console.log('Photo area dimensions:', rect.width, rect.height);
             
             // Make canvas slightly smaller to account for rotation overflow
-            const canvasWidth = 286;
-            const canvasHeight = 284;
+            const canvasWidth = 286
+            const canvasHeight = 284
             
             // Set canvas size
             photoCanvas.width = canvasWidth;
@@ -362,15 +360,7 @@
                         // Hide upload button
                         uploadBtn.classList.add('hidden');
                     };
-                    img.onerror = function() {
-                        console.error('Failed to load image');
-                        alert('Failed to load image. Please try again.');
-                    };
                     img.src = event.target.result;
-                };
-                reader.onerror = function() {
-                    console.error('Failed to read file');
-                    alert('Failed to read file. Please try again.');
                 };
                 reader.readAsDataURL(file);
             }
