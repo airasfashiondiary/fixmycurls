@@ -284,7 +284,8 @@
         const uploadBtn = document.getElementById('upload-btn');
         const uploadInput = document.getElementById('upload-input');
         const shareBtn = document.getElementById('share-btn');
-
+        // Keep track of the currently displayed image so we can redraw it after a resize
+        let currentImg = null;
         // Set canvas size to match container and account for rotation
         function resizeCanvasToArea() {
             const rect = photoArea.getBoundingClientRect();
@@ -302,6 +303,11 @@
             photoCanvas.style.width = canvasWidth + 'px';
             photoCanvas.style.height = canvasHeight + 'px';
             
+            // Redraw the image if we have one after resizing (mobile scroll can trigger resize events)
+            if (currentImg) {
+                const ctx = photoCanvas.getContext('2d');
+                drawImageCover(ctx, currentImg, photoCanvas.width, photoCanvas.height);
+            }
             console.log('Canvas sized to:', photoCanvas.width, photoCanvas.height);
         }
         // Initial resize
@@ -356,6 +362,8 @@
                         console.log('Image loaded:', img.width, img.height);
                         resizeCanvasToArea();
                         const ctx = photoCanvas.getContext('2d');
+                        // Store the uploaded image so we can redraw it on resize
+                        currentImg = img;
                         drawImageCover(ctx, img, photoCanvas.width, photoCanvas.height);
                         console.log('Image drawn to canvas');
                         // Hide upload button
