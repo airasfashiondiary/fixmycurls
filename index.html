@@ -129,7 +129,7 @@
             background: transparent;
             border: 2px solid #736493;
             margin-bottom: 0;
-            padding: 2.5vw 2.5vw 4vw 2.5vw;
+            padding: 2.5vw;
             position: relative;
             height: 9vh;
             min-height: 65px;
@@ -159,9 +159,8 @@
             background: transparent;
             outline: none;
             position: absolute;
-            bottom: 2vw;
+            bottom: 4vw;
             text-align: left;
-            line-height: 1.2;
         }
 
         .field-input::placeholder {
@@ -380,10 +379,7 @@
         // Share to Instagram
          shareBtn.addEventListener('click', async () => {
         try {
-            // Wait for fonts to load completely
-            await document.fonts.ready;
-            
-            // Scroll to top to ensure full viewport is rendered correctly
+         // Scroll to top to ensure full viewport is rendered correctly
             window.scrollTo(0, 0);
                await new Promise(resolve => setTimeout(resolve, 50)); // wait for scroll to finish
 
